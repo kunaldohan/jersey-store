@@ -3,6 +3,8 @@
 import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
+  const API = import.meta.env.VITE_API_URL; // ✅ backend URL
+
   return (
     <div className="bg-dark-700 rounded-lg overflow-hidden border border-dark-600 hover:border-brand-500 transition-all duration-200 group">
 
@@ -10,7 +12,7 @@ const ProductCard = ({ product }) => {
       <Link to={`/products/${product.id}`}>
         <div className="relative overflow-hidden h-52 bg-dark-600">
           <img
-            src={product.imageUrl}
+            src={`${API}${product.imageUrl}`} // ✅ FIXED IMAGE URL
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
@@ -38,7 +40,7 @@ const ProductCard = ({ product }) => {
         </p>
 
         <div className="flex items-center justify-between mt-4">
-          {/* ✅ INR PRICE */}
+          {/* INR PRICE */}
           <span className="text-brand-500 font-display text-xl font-bold">
             ₹{product.price.toLocaleString("en-IN")}
           </span>
