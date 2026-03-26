@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
       <Link to={`/products/${product.id}`}>
         <div className="relative overflow-hidden h-52 bg-dark-600">
           <img
-            src={`${API}${product.imageUrl}`} // ✅ FIXED IMAGE URL
+            src={`${import.meta.env.VITE_API_URL}${product.imageUrl}`}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
