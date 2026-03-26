@@ -1,19 +1,17 @@
 // server/index.js
-// Main entry point — sets up Express, connects middleware, and mounts routes
 
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path"); // ✅ ONLY ONCE
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
 
-// ── CORS FIX (VERY IMPORTANT 🔥) ─────────────────────────────
+// ── CORS FIX ─────────────────────────────────────────────
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
 
     if (
@@ -29,18 +27,13 @@ app.use(cors({
   credentials: true
 }));
 
-// ── Middleware ──────────────────────────────────────────────
+// ── Middleware ──────────────────────────────────────────
 app.use(express.json());
-const path = require("path");
 
-// ✅ ADD THIS
+// ✅ STATIC IMAGES (ONLY ONCE)
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-// ── Static Images (IMPORTANT FOR PRODUCT IMAGES 🔥) ─────────
-const path = require("path");
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-
-// ── Routes ──────────────────────────────────────────────────
+// ── Routes ─────────────────────────────────────────────
 const authRoutes = require("./routes/auth.routes");
 const productRoutes = require("./routes/product.routes");
 const cartRoutes = require("./routes/cart.routes");
@@ -53,12 +46,12 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
-// ── Health check ────────────────────────────────────────────
+// ── Health check ────────────────────────────────────────
 app.get("/", (req, res) => {
   res.json({ success: true, message: "JerseyVault API is running 🚀" });
 });
 
-// ── Global error handler ────────────────────────────────────
+// ── Error handler ───────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({
@@ -67,7 +60,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ── Start server ────────────────────────────────────────────
+// ── Start server ────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
