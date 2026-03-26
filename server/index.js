@@ -31,6 +31,10 @@ app.use(cors({
 
 // ── Middleware ──────────────────────────────────────────────
 app.use(express.json());
+const path = require("path");
+
+// ✅ ADD THIS
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // ── Static Images (IMPORTANT FOR PRODUCT IMAGES 🔥) ─────────
 const path = require("path");
