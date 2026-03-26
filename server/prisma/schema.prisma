@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
   price       Float
@@ -19,14 +19,14 @@ model Product {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  email     String  @unique
+  email     String   @unique
   password  String
-  isAdmin   Boolean @default(false)
+  isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  orders    Order[]   // ✅ ADD THIS LINE
+  orders    Order[]
 }
 
 model Order {
@@ -35,5 +35,5 @@ model Order {
   total     Float
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
