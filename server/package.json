@@ -6,18 +6,19 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "build": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "5.10.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.18.3",
-    "jsonwebtoken": "^9.0.2"
+    "bcryptjs": "2.4.3",
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "4.18.3",
+    "jsonwebtoken": "9.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
+    "nodemon": "3.1.0",
     "prisma": "5.10.0"
   }
 }
