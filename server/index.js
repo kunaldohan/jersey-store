@@ -5,17 +5,36 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-// Load environment variables from .env file
+// Load environment variables
 dotenv.config();
 
 const app = express();
 
-// ── Middleware ──────────────────────────────────────────────
-// Allow requests from our frontend
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+// ── CORS FIX (VERY IMPORTANT 🔥) ─────────────────────────────
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
 
-// Parse incoming JSON bodies
+    if (
+      origin.includes("vercel.app") ||
+      origin.includes("localhost")
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
+// ── Middleware ──────────────────────────────────────────────
 app.use(express.json());
+
+// ── Static Images (IMPORTANT FOR PRODUCT IMAGES 🔥) ─────────
+const path = require("path");
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // ── Routes ──────────────────────────────────────────────────
 const authRoutes = require("./routes/auth.routes");
@@ -36,7 +55,6 @@ app.get("/", (req, res) => {
 });
 
 // ── Global error handler ────────────────────────────────────
-// This catches any errors passed via next(err)
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
   res.status(500).json({
